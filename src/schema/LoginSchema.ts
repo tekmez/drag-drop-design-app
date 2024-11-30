@@ -1,7 +1,7 @@
 import { z } from "zod"
  
 export const formSchema = z.object({
-  username: z.string().min(2).max(50).refine(data => {
+  username: z.string().refine(data => {
     // Check if the username is admin
     if (data === "admin") {
         return true
@@ -11,7 +11,7 @@ export const formSchema = z.object({
         message: "Invalid username",
 
     }),
-  password: z.string().min(2).max(50).refine(data => {
+  password: z.string().refine(data => {
     // Check if the password is 12345
     if (data === "12345") {
         return true

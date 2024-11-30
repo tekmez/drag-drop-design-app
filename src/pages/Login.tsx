@@ -19,8 +19,8 @@ const Login = () => {
   const form = useForm<FormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "admin",
-      password: "12345",
+      username: "",
+      password: "",
     },
   });
 
@@ -33,7 +33,12 @@ const Login = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8
+      text-2xl font-bold p-2 bg-gray-100 rounded-md text-center
+      "
+      >
         <FormField
           control={form.control}
           name="username"
@@ -60,7 +65,9 @@ const Login = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Login</Button>
+        <Button type="submit" className="w-full">
+          Login
+        </Button>
       </form>
     </Form>
   );

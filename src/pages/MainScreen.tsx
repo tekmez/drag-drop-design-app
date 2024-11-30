@@ -142,7 +142,9 @@ const MainScreen = () => {
     <>
       <Toaster position="top-center" />
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Simple Design App</h1>
+        <h1 className="text-2xl font-bold mb-4 p-2 bg-gray-100 rounded-md text-center">
+          Simple Design App
+        </h1>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="w-full md:w-1/4">
             <h2 className="text-lg font-semibold mb-2 text-center">
@@ -155,7 +157,7 @@ const MainScreen = () => {
                   key={element.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, element.type)}
-                  className="p-2 bg-gray-100 rounded cursor-move"
+                  className="p-2 bg-gray-100 rounded-md cursor-move text-center"
                 >
                   {element.id}
                 </div>
