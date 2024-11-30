@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Toaster } from "@/components/ui/sonner";
 import { Textarea } from "@/components/ui/textarea";
 import { ComponentData } from "@/types/globalTypes";
 import { loadDesign, saveDesign } from "@/utils/storage";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const MainScreen = () => {
   const [draggingComponent, setDraggingComponent] = useState<string | null>(
@@ -123,88 +125,94 @@ const MainScreen = () => {
 
   const saveCurrentDesign = () => {
     saveDesign(droppedComponents);
-    alert("Tasarım kaydedildi!");
+    toast.success("Design saved successfully");
   };
 
   const loadSavedDesign = () => {
     const savedDesign = loadDesign();
     if (savedDesign) {
       setDroppedComponents(savedDesign);
-      alert("Kaydedilen tasarım yüklendi!");
+      toast.success("Design loaded successfully");
     } else {
-      alert("Kaydedilen bir tasarım bulunamadı.");
+      toast.error("No saved design found");
     }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Simple Design App</h1>
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="w-full md:w-1/4">
-          <h2 className="text-lg font-semibold mb-2 text-center">
-            Form Elements
-          </h2>
-          {/* Components List */}
-          <div className="space-y-2">
-            {componentsList.map((element) => (
-              <div
-                key={element.id}
-                draggable
-                onDragStart={(e) => handleDragStart(e, element.type)}
-                className="p-2 bg-gray-100 rounded cursor-move"
-              >
-                {element.id}
-              </div>
-            ))}
-          </div>
-          {/* Proporties */}
-          <div className="mt-1">
+    <>
+      <Toaster position="top-center" />
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Simple Design App</h1>
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="w-full md:w-1/4">
             <h2 className="text-lg font-semibold mb-2 text-center">
-              Properties Panel
+              Form Elements
             </h2>
-            <PropertiesPanel
-              selectedComponent={selectedComponent}
-              onUpdate={updateComponentProperties}
-            />
-          </div>
-        </div>
-        {/* Design Area */}
-        <div className="w-full md:w-3/4">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold mb-2">Design Area</h2>
-            <div className="flex justify-end mb-2 gap-2">
-              {selectedComponent && (
-                <Button variant={"destructive"} onClick={handleDeleteComponent}>
-                  Delete Component
-                </Button>
-              )}
-              <Button className="bg-green-600" onClick={saveCurrentDesign}>
-                Save Design
-              </Button>
-              <Button onClick={loadSavedDesign} className="bg-purple-500">
-                Load Design
-              </Button>
-            </div>
-          </div>
-          <Card
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            className="min-h-[600px] p-2 bg-gray-100"
-          >
-            <CardContent className="space-y-2">
-              {droppedComponents.map((element) => (
+            {/* Components List */}
+            <div className="space-y-2">
+              {componentsList.map((element) => (
                 <div
                   key={element.id}
-                  onClick={() => handleComponentClick(element.id)}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, element.type)}
+                  className="p-2 bg-gray-100 rounded cursor-move"
                 >
-                  {renderElement(element)}
+                  {element.id}
                 </div>
               ))}
-            </CardContent>
-          </Card>
+            </div>
+            {/* Proporties */}
+            <div className="mt-1">
+              <h2 className="text-lg font-semibold mb-2 text-center">
+                Properties Panel
+              </h2>
+              <PropertiesPanel
+                selectedComponent={selectedComponent}
+                onUpdate={updateComponentProperties}
+              />
+            </div>
+          </div>
+          {/* Design Area */}
+          <div className="w-full md:w-3/4">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold mb-2">Design Area</h2>
+              <div className="flex justify-end mb-2 gap-2">
+                {selectedComponent && (
+                  <Button
+                    variant={"destructive"}
+                    onClick={handleDeleteComponent}
+                  >
+                    Delete Component
+                  </Button>
+                )}
+                <Button className="bg-green-600" onClick={saveCurrentDesign}>
+                  Save Design
+                </Button>
+                <Button onClick={loadSavedDesign} className="bg-purple-500">
+                  Load Design
+                </Button>
+              </div>
+            </div>
+            <Card
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              className="min-h-[600px] p-2 bg-gray-100"
+            >
+              <CardContent className="space-y-2">
+                {droppedComponents.map((element) => (
+                  <div
+                    key={element.id}
+                    onClick={() => handleComponentClick(element.id)}
+                  >
+                    {renderElement(element)}
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
