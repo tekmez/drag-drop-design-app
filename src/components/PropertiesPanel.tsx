@@ -9,6 +9,7 @@ const PropertiesPanel = ({
   if (!selectedComponent)
     return <Label>Please select a component to see its properties panel</Label>;
 
+  // List of properties to display in the panel
   const propertiesList: {
     label: string;
     key: keyof typeof selectedComponent;
