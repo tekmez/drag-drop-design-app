@@ -1,9 +1,10 @@
 import PropertiesPanel from "@/components/PropertiesPanel";
-import RenderElement from "@/components/RenderElement";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-export interface ComponentData {
+interface ComponentData extends React.HTMLAttributes<HTMLDivElement> {
   id: string;
   type: "button" | "input" | "textarea";
   left: number;
@@ -11,8 +12,9 @@ export interface ComponentData {
   width: number;
   height: number;
   backgroundColor?: string;
+  handleComponentDragStart?: () => void;
+  handleComponentDragEnd?: (e: React.DragEvent) => void;
 }
-
 const componentsList: ComponentData[] = [
   { id: "button", type: "button", left: 0, top: 0, width: 100, height: 40 },
   { id: "input", type: "input", left: 0, top: 0, width: 200, height: 40 },
@@ -25,23 +27,30 @@ const componentsList: ComponentData[] = [
     height: 100,
   },
 ];
+
 const MainScreen = () => {
+  const [draggingComponent, setDraggingComponent] = useState<string | null>(
+    null
+  );
   const [droppedComponents, setDroppedComponents] = useState<ComponentData[]>(
     []
   );
   const [selectedComponent, setSelectedComponent] =
     useState<ComponentData | null>(null);
 
+  // Drag and Drop from Components List to Design Area
   const handleDragStart = (e: React.DragEvent, type: ComponentData["type"]) => {
     e.dataTransfer.setData("type", type);
   };
+
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
     const type = e.dataTransfer.getData("type") as ComponentData["type"];
     const newComponent = {
       id: String(Date.now()),
       type,
-      left: 15,
-      top: 0,
+      left: e.clientX - 40,
+      top: e.clientY - 20,
       width: 100,
       height: 40,
     };
@@ -51,11 +60,13 @@ const MainScreen = () => {
     e.preventDefault();
   };
 
+  // Selecting a component from Design Area
   const handleComponentClick = (componentId: string) => {
     const component = droppedComponents.find((comp) => comp.id === componentId);
     setSelectedComponent(component || null);
   };
 
+  // Update Component Properties from Properties Panel
   const updateComponentProperties = (updates: Partial<ComponentData>) => {
     if (!selectedComponent) return;
 
@@ -68,6 +79,7 @@ const MainScreen = () => {
     setSelectedComponent((prev) => (prev ? { ...prev, ...updates } : null));
   };
 
+  // Delete Component from Design Area
   const handleDeleteComponent = () => {
     if (!selectedComponent) return;
 
@@ -75,6 +87,50 @@ const MainScreen = () => {
       prev.filter((comp) => comp.id !== selectedComponent.id)
     );
     setSelectedComponent(null);
+  };
+
+  // Dragging Components in Design Area
+  const handleComponentDragStart = (componentId: string) => {
+    setDraggingComponent(componentId);
+  };
+
+  const handleComponentDragEnd = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDroppedComponents((prev) =>
+      prev.map((comp) =>
+        comp.id === draggingComponent
+          ? { ...comp, left: e.clientX - 40, top: e.clientY - 20 }
+          : comp
+      )
+    );
+  };
+
+  // Render Element based on Component Type in Design Area
+  const renderElement = (element: ComponentData) => {
+    const style: React.CSSProperties = {
+      position: "absolute",
+      left: element.left,
+      top: element.top,
+      width: element.width,
+      height: element.height,
+      backgroundColor: element.backgroundColor,
+    };
+    const props = {
+      style,
+      draggable: true,
+      onDragStart: () => handleComponentDragStart(element.id),
+      onDragEnd: handleComponentDragEnd,
+    };
+    switch (element.type) {
+      case "button":
+        return <Button {...props}> Button </Button>;
+      case "input":
+        return <Input {...props} placeholder="Input" />;
+      case "textarea":
+        return <Textarea {...props} placeholder="Textarea" />;
+      default:
+        return null;
+    }
   };
   return (
     <div className="container mx-auto p-4">
@@ -119,16 +175,15 @@ const MainScreen = () => {
           <Card
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="min-h-[400px] p-4"
+            className="min-h-[600px] p-2"
           >
             <CardContent className="space-y-2">
               {droppedComponents.map((element) => (
                 <div
                   key={element.id}
-                  className="p-2"
                   onClick={() => handleComponentClick(element.id)}
                 >
-                  {RenderElement(element)}
+                  {renderElement(element)}
                 </div>
               ))}
             </CardContent>
