@@ -1,18 +1,7 @@
+import { PropertiesPanelProps } from "@/types/globalTypes";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-interface PropertiesPanelProps {
-  selectedComponent: {
-    id: string;
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-    backgroundColor?: string;
-    borderColor?: string;
-  } | null;
-  onUpdate: (updates: any) => void;
-}
 const PropertiesPanel = ({
   selectedComponent,
   onUpdate,

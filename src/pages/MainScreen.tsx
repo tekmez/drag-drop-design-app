@@ -1,37 +1,13 @@
+import { componentsList } from "@/componentList";
 import PropertiesPanel from "@/components/PropertiesPanel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { ComponentData } from "@/types/globalTypes";
 import { loadDesign, saveDesign } from "@/utils/storage";
 import { useState } from "react";
-interface ComponentData extends React.HTMLAttributes<HTMLDivElement> {
-  id: string;
-  type: "button" | "input" | "textarea" | "checkbox" | "image";
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  backgroundColor?: string;
-  borderColor?: string;
-  handleComponentDragStart?: () => void;
-  handleComponentDragEnd?: (e: React.DragEvent) => void;
-}
-const componentsList: ComponentData[] = [
-  { id: "button", type: "button", left: 0, top: 0, width: 100, height: 40 },
-  { id: "input", type: "input", left: 0, top: 0, width: 100, height: 40 },
-  {
-    id: "textarea",
-    type: "textarea",
-    left: 0,
-    top: 0,
-    width: 200,
-    height: 100,
-  },
-  { id: "checkbox", type: "checkbox", left: 0, top: 0, width: 100, height: 40 },
-  { id: "image", type: "image", left: 0, top: 0, width: 200, height: 40 },
-];
 
 const MainScreen = () => {
   const [draggingComponent, setDraggingComponent] = useState<string | null>(
