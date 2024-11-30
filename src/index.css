@@ -2,27 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-
-/* :root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-weight: 400;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box;
-} */
-
-
 @layer base {
   :root {
+    background-color: #fefefe;
 
-
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
 }

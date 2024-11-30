@@ -98,7 +98,7 @@ const MainScreen = () => {
       width: element.width,
       height: element.height,
       backgroundColor: element.backgroundColor,
-      border: "1px solid",
+      border: "2px solid",
       borderColor: element.borderColor,
     };
     const props = {

@@ -40,7 +40,8 @@ const PropertiesPanel = ({
             onChange={(e) =>
               onUpdate({
                 [property.key]:
-                  property.key === "backgroundColor"
+                  property.key === "backgroundColor" ||
+                  property.key === "borderColor"
                     ? e.target.value
                     : Number(e.target.value),
               })
