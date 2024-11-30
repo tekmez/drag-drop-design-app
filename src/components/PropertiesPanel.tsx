@@ -9,74 +9,45 @@ const PropertiesPanel = ({
   if (!selectedComponent)
     return <Label>Please select a component to see its properties panel</Label>;
 
+  const propertiesList: {
+    label: string;
+    key: keyof typeof selectedComponent;
+  }[] = [
+    { label: "X Position", key: "left" },
+    { label: "Y Position", key: "top" },
+    { label: "Width", key: "width" },
+    { label: "Height", key: "height" },
+    { label: "Background", key: "backgroundColor" },
+    { label: "Border", key: "borderColor" },
+  ];
   return (
-    <div className="p-4 bg-gray-100 border border-gray-200 rounded-md flex flex-col gap-1">
-      <div>
-        <Label htmlFor="xPosition">X Position:</Label>
-        <Input
-          id="xPosition"
-          type="number"
-          className="mt-1"
-          value={selectedComponent.left}
-          onChange={(e) => onUpdate({ left: Number(e.target.value) })}
-        />
-      </div>
-      <div>
-        <Label htmlFor="yPosition">Y Position:</Label>
-        <Input
-          id="yPosition"
-          type="number"
-          className="mt-1"
-          value={selectedComponent.top}
-          onChange={(e) => onUpdate({ top: Number(e.target.value) })}
-        />
-      </div>
-      <div>
-        <Label htmlFor="width">Width:</Label>
-        <Input
-          id="width"
-          type="number"
-          min="0"
-          className="mt-1"
-          value={selectedComponent.width}
-          onChange={(e) => onUpdate({ width: Number(e.target.value) })}
-        />
-      </div>
-      <div>
-        <Label htmlFor="height">Height:</Label>
-        <Input
-          id="height"
-          type="number"
-          min="0"
-          className="mt-1"
-          value={selectedComponent.height}
-          onChange={(e) => onUpdate({ height: Number(e.target.value) })}
-        />
-      </div>
-      <div className="flex items-center justify-center gap-2 flex-wrap">
-        <div>
-          <Label htmlFor="bgColor">Background</Label>
+    <div className="p-4 border border-gray-200 rounded-md flex flex-col gap-1">
+      <h4 className="font-semibold">Properties</h4>
+      {propertiesList.map((property) => (
+        <div key={property.key}>
+          <Label htmlFor={property.key}>{property.label}</Label>
           <Input
-            id="bgColor"
-            type="color"
+            id={property.key}
+            type={
+              property.key === "backgroundColor" ||
+              property.key === "borderColor"
+                ? "color"
+                : "number"
+            }
             min="0"
-            className="mt-1 min-w-[100px]"
-            value={selectedComponent.backgroundColor}
-            onChange={(e) => onUpdate({ backgroundColor: e.target.value })}
+            className="mt-1"
+            value={selectedComponent[property.key] ?? ""}
+            onChange={(e) =>
+              onUpdate({
+                [property.key]:
+                  property.key === "backgroundColor"
+                    ? e.target.value
+                    : Number(e.target.value),
+              })
+            }
           />
         </div>
-        <div>
-          <Label htmlFor="borderColor">Border</Label>
-          <Input
-            id="borderColor"
-            type="color"
-            min="0"
-            className="mt-1 min-w-[100px]"
-            value={selectedComponent.borderColor}
-            onChange={(e) => onUpdate({ borderColor: e.target.value })}
-          />
-        </div>
-      </div>
+      ))}
     </div>
   );
 };

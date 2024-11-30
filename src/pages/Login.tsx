@@ -36,7 +36,7 @@ const Login = () => {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8
-      text-2xl font-bold p-2 bg-gray-100 rounded-md text-center
+      text-2xl font-bold p-6 border rounded-md text-center
       "
       >
         <FormField

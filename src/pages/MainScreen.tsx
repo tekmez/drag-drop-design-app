@@ -141,23 +141,23 @@ const MainScreen = () => {
   return (
     <>
       <Toaster position="top-center" />
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4 p-2 bg-gray-100 rounded-md text-center">
-          Simple Design App
+      <div className="container mx-auto">
+        <h1 className="text-xl font-bold mb-4 mt-1 p-1 bg-gray-100 rounded-md text-center">
+          Drag Drop Design App
         </h1>
         <div className="flex flex-col md:flex-row gap-4">
-          <div className="w-full md:w-1/4">
+          <div className="w-full md:w-1/4 mt-3">
             <h2 className="text-lg font-semibold mb-2 text-center">
               Form Elements
             </h2>
             {/* Components List */}
-            <div className="space-y-2">
+            <div className=" border border-gray-200 px-4 py-2 rounded-md grid grid-cols-2 gap-2">
               {componentsList.map((element) => (
                 <div
                   key={element.id}
                   draggable
                   onDragStart={(e) => handleDragStart(e, element.type)}
-                  className="p-2 bg-gray-100 rounded-md cursor-move text-center"
+                  className="p-2 bg-gray-100 rounded-md cursor-move text-center hover:bg-gray-300"
                 >
                   {element.id}
                 </div>
