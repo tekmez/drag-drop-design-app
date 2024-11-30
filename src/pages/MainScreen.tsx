@@ -189,7 +189,7 @@ const MainScreen = () => {
           <Card
             onDragOver={handleDragOver}
             onDrop={handleDrop}
-            className="min-h-[600px] p-2"
+            className="min-h-[600px] p-2 bg-gray-100"
           >
             <CardContent className="space-y-2">
               {droppedComponents.map((element) => (
