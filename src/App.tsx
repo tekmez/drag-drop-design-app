@@ -3,14 +3,20 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import PrivateRoute from "./components/PrivateRoute";
 import MainScreen from "./pages/MainScreen";
-import "./App.css";
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route
+            path="/login"
+            element={
+              <div className="flex items-center justify-center h-screen">
+                <Login />
+              </div>
+            }
+          />
           <Route
             path="/main"
             element={
