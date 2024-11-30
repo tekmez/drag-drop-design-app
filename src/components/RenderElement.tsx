@@ -7,21 +7,44 @@ const RenderElement = (element: ComponentData) => {
   switch (element.type) {
     case "button":
       return (
-        <Button className={`relative left-${element.left} top-${element.top}`}>
+        <Button
+          style={{
+            position: "relative",
+            left: element.left,
+            top: element.top,
+            width: element.width,
+            height: element.height,
+            backgroundColor: element.backgroundColor,
+          }}
+        >
           Button
         </Button>
       );
     case "input":
       return (
         <Input
-          className={`relative left-${element.left} top-${element.top}`}
+          style={{
+            position: "relative",
+            left: element.left,
+            top: element.top,
+            width: element.width,
+            height: element.height,
+            backgroundColor: element.backgroundColor,
+          }}
           placeholder="Input"
         />
       );
     case "textarea":
       return (
         <Textarea
-          className={`relative left-${element.left} top-${element.top}`}
+          style={{
+            position: "relative",
+            left: element.left,
+            top: element.top,
+            width: element.width,
+            height: element.height,
+            backgroundColor: element.backgroundColor,
+          }}
           placeholder="Textarea"
         />
       );

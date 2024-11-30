@@ -1,24 +1,37 @@
+import PropertiesPanel from "@/components/PropertiesPanel";
 import RenderElement from "@/components/RenderElement";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
 export interface ComponentData {
   id: string;
   type: "button" | "input" | "textarea";
   left: number;
   top: number;
+  width: number;
+  height: number;
+  backgroundColor?: string;
 }
 
 const componentsList: ComponentData[] = [
-  { id: "button", type: "button", left: 0, top: 0 },
-  { id: "input", type: "input", left: 0, top: 0 },
-  { id: "textarea", type: "textarea", left: 0, top: 0 },
+  { id: "button", type: "button", left: 0, top: 0, width: 100, height: 40 },
+  { id: "input", type: "input", left: 0, top: 0, width: 200, height: 40 },
+  {
+    id: "textarea",
+    type: "textarea",
+    left: 0,
+    top: 0,
+    width: 200,
+    height: 100,
+  },
 ];
 const MainScreen = () => {
   const [droppedComponents, setDroppedComponents] = useState<ComponentData[]>(
     []
   );
+  const [selectedComponent, setSelectedComponent] =
+    useState<ComponentData | null>(null);
+
   const handleDragStart = (e: React.DragEvent, type: ComponentData["type"]) => {
     e.dataTransfer.setData("type", type);
   };
@@ -27,8 +40,10 @@ const MainScreen = () => {
     const newComponent = {
       id: String(Date.now()),
       type,
-      left: e.clientX - 200, // Adjust offset for proper placement
-      top: e.clientY - 100,
+      left: 15,
+      top: 0,
+      width: 100,
+      height: 40,
     };
     setDroppedComponents((prev) => [...prev, newComponent]);
   };
@@ -36,12 +51,40 @@ const MainScreen = () => {
     e.preventDefault();
   };
 
+  const handleComponentClick = (componentId: string) => {
+    const component = droppedComponents.find((comp) => comp.id === componentId);
+    setSelectedComponent(component || null);
+  };
+
+  const updateComponentProperties = (updates: Partial<ComponentData>) => {
+    if (!selectedComponent) return;
+
+    setDroppedComponents((prev) =>
+      prev.map((comp) =>
+        comp.id === selectedComponent.id ? { ...comp, ...updates } : comp
+      )
+    );
+
+    setSelectedComponent((prev) => (prev ? { ...prev, ...updates } : null));
+  };
+
+  const handleDeleteComponent = () => {
+    if (!selectedComponent) return;
+
+    setDroppedComponents((prev) =>
+      prev.filter((comp) => comp.id !== selectedComponent.id)
+    );
+    setSelectedComponent(null);
+  };
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Simple Design App</h1>
       <div className="flex flex-col md:flex-row gap-4">
         <div className="w-full md:w-1/4">
-          <h2 className="text-lg font-semibold mb-2">Form Elements</h2>
+          <h2 className="text-lg font-semibold mb-2 text-center">
+            Form Elements
+          </h2>
+          {/* Components List */}
           <div className="space-y-2">
             {componentsList.map((element) => (
               <div
@@ -54,18 +97,23 @@ const MainScreen = () => {
               </div>
             ))}
           </div>
-          <div className="mt-4">
-            <Label htmlFor="border-radius">Border Radius (px)</Label>
-            <Input
-              id="border-radius"
-              type="number"
-              // value={borderRadius}
-              // onChange={handleBorderRadiusChange}
-              min="0"
-              className="mt-1"
+          {/* Proporties */}
+          {selectedComponent && (
+            <Button className="w-full mt-4" onClick={handleDeleteComponent}>
+              Delete Component
+            </Button>
+          )}
+          <div className="mt-2">
+            <h2 className="text-lg font-semibold mb-2 text-center">
+              Properties Panel
+            </h2>
+            <PropertiesPanel
+              selectedComponent={selectedComponent}
+              onUpdate={updateComponentProperties}
             />
           </div>
         </div>
+        {/* Design Area */}
         <div className="w-full md:w-3/4">
           <h2 className="text-lg font-semibold mb-2">Design Area</h2>
           <Card
@@ -75,7 +123,11 @@ const MainScreen = () => {
           >
             <CardContent className="space-y-2">
               {droppedComponents.map((element) => (
-                <div key={element.id} className="p-2">
+                <div
+                  key={element.id}
+                  className="p-2"
+                  onClick={() => handleComponentClick(element.id)}
+                >
                   {RenderElement(element)}
                 </div>
               ))}
