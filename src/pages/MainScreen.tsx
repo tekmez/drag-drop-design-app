@@ -1,23 +1,26 @@
 import PropertiesPanel from "@/components/PropertiesPanel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { loadDesign, saveDesign } from "@/utils/storage";
 import { useState } from "react";
 interface ComponentData extends React.HTMLAttributes<HTMLDivElement> {
   id: string;
-  type: "button" | "input" | "textarea";
+  type: "button" | "input" | "textarea" | "checkbox" | "image";
   left: number;
   top: number;
   width: number;
   height: number;
   backgroundColor?: string;
+  borderColor?: string;
   handleComponentDragStart?: () => void;
   handleComponentDragEnd?: (e: React.DragEvent) => void;
 }
 const componentsList: ComponentData[] = [
   { id: "button", type: "button", left: 0, top: 0, width: 100, height: 40 },
-  { id: "input", type: "input", left: 0, top: 0, width: 200, height: 40 },
+  { id: "input", type: "input", left: 0, top: 0, width: 100, height: 40 },
   {
     id: "textarea",
     type: "textarea",
@@ -26,6 +29,8 @@ const componentsList: ComponentData[] = [
     width: 200,
     height: 100,
   },
+  { id: "checkbox", type: "checkbox", left: 0, top: 0, width: 100, height: 40 },
+  { id: "image", type: "image", left: 0, top: 0, width: 200, height: 40 },
 ];
 
 const MainScreen = () => {
@@ -51,10 +56,11 @@ const MainScreen = () => {
       type,
       left: e.clientX - 40,
       top: e.clientY - 20,
-      width: 100,
+      width: type === "image" ? 250 : 100,
       height: 40,
     };
     setDroppedComponents((prev) => [...prev, newComponent]);
+    setSelectedComponent(null);
   };
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -114,6 +120,8 @@ const MainScreen = () => {
       width: element.width,
       height: element.height,
       backgroundColor: element.backgroundColor,
+      border: "1px solid",
+      borderColor: element.borderColor,
     };
     const props = {
       style,
@@ -128,10 +136,30 @@ const MainScreen = () => {
         return <Input {...props} placeholder="Input" />;
       case "textarea":
         return <Textarea {...props} placeholder="Textarea" />;
+      case "checkbox":
+        return <Checkbox {...props} defaultChecked />;
+      case "image":
+        return <Input {...props} type="file" />;
       default:
         return null;
     }
   };
+
+  const saveCurrentDesign = () => {
+    saveDesign(droppedComponents);
+    alert("Tasarım kaydedildi!");
+  };
+
+  const loadSavedDesign = () => {
+    const savedDesign = loadDesign();
+    if (savedDesign) {
+      setDroppedComponents(savedDesign);
+      alert("Kaydedilen tasarım yüklendi!");
+    } else {
+      alert("Kaydedilen bir tasarım bulunamadı.");
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Simple Design App</h1>
@@ -154,12 +182,7 @@ const MainScreen = () => {
             ))}
           </div>
           {/* Proporties */}
-          {selectedComponent && (
-            <Button className="w-full mt-4" onClick={handleDeleteComponent}>
-              Delete Component
-            </Button>
-          )}
-          <div className="mt-2">
+          <div className="mt-1">
             <h2 className="text-lg font-semibold mb-2 text-center">
               Properties Panel
             </h2>
@@ -171,7 +194,22 @@ const MainScreen = () => {
         </div>
         {/* Design Area */}
         <div className="w-full md:w-3/4">
-          <h2 className="text-lg font-semibold mb-2">Design Area</h2>
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold mb-2">Design Area</h2>
+            <div className="flex justify-end mb-2 gap-2">
+              {selectedComponent && (
+                <Button variant={"destructive"} onClick={handleDeleteComponent}>
+                  Delete Component
+                </Button>
+              )}
+              <Button className="bg-green-600" onClick={saveCurrentDesign}>
+                Save Design
+              </Button>
+              <Button onClick={loadSavedDesign} className="bg-purple-500">
+                Load Design
+              </Button>
+            </div>
+          </div>
           <Card
             onDragOver={handleDragOver}
             onDrop={handleDrop}

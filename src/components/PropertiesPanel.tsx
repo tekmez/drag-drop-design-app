@@ -9,6 +9,7 @@ interface PropertiesPanelProps {
     width: number;
     height: number;
     backgroundColor?: string;
+    borderColor?: string;
   } | null;
   onUpdate: (updates: any) => void;
 }
@@ -63,16 +64,29 @@ const PropertiesPanel = ({
           onChange={(e) => onUpdate({ height: Number(e.target.value) })}
         />
       </div>
-      <div>
-        <Label htmlFor="bgColor">Background color</Label>
-        <Input
-          id="bgColor"
-          type="color"
-          min="0"
-          className="mt-1"
-          value={selectedComponent.backgroundColor}
-          onChange={(e) => onUpdate({ backgroundColor: e.target.value })}
-        />
+      <div className="flex items-center justify-center gap-2 flex-wrap">
+        <div>
+          <Label htmlFor="bgColor">Background</Label>
+          <Input
+            id="bgColor"
+            type="color"
+            min="0"
+            className="mt-1 min-w-[100px]"
+            value={selectedComponent.backgroundColor}
+            onChange={(e) => onUpdate({ backgroundColor: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label htmlFor="borderColor">Border</Label>
+          <Input
+            id="borderColor"
+            type="color"
+            min="0"
+            className="mt-1 min-w-[100px]"
+            value={selectedComponent.borderColor}
+            onChange={(e) => onUpdate({ borderColor: e.target.value })}
+          />
+        </div>
       </div>
     </div>
   );
