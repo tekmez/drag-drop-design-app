@@ -30,9 +30,9 @@ This project is a React application where users can drag, drop, and edit compone
    ```bash
    git clone https://github.com/tekmez/drag-drop-design-app.git
    cd drag-drop-design-app
-       ```
+   
 2. **Install necessary packages**
-```bash
+   ```bash
    yarn install
    ```
 3. **Start the app**
