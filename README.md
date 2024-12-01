@@ -1,9 +1,13 @@
+
 # React Drag-and-Drop Design Tool
 
 This project is a React application where users can drag, drop, and edit components, as well as save and load their designs.
 
 ---
+<img width="1562" alt="Ekran Resmi 2024-12-01 19 52 36" src="https://github.com/user-attachments/assets/ad18c690-925a-4cfe-b6a9-ae29a4a30d72">
 
+
+---
 ## **Features**
 - User authentication through a login screen.
 - Drag-and-drop mechanism for the design area.
