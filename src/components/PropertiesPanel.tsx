@@ -22,8 +22,7 @@ const PropertiesPanel = ({
     { label: "Border", key: "borderColor" },
   ];
   return (
-    <div className="p-4 border border-gray-200 rounded-md flex flex-col gap-1">
-      <h4 className="font-semibold">Properties</h4>
+    <div className="p-4 border border-gray-200 rounded-md grid grid-cols-2 gap-2">
       {propertiesList.map((property) => (
         <div key={property.key}>
           <Label htmlFor={property.key}>{property.label}</Label>

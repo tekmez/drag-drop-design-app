@@ -124,6 +124,9 @@ const MainScreen = () => {
   };
 
   const saveCurrentDesign = () => {
+    if (droppedComponents.length === 0) {
+      return toast.error("No design found to save");
+    }
     saveDesign(droppedComponents);
     toast.success("Design saved successfully");
   };
@@ -142,11 +145,11 @@ const MainScreen = () => {
     <>
       <Toaster position="top-center" />
       <div className="container mx-auto">
-        <h1 className="text-xl font-bold mb-4 mt-1 p-1 bg-gray-100 rounded-md text-center">
+        <h1 className="text-xl font-bold mb-4 mt-2 p-1 bg-gray-100 rounded-md text-center">
           Drag Drop Design App
         </h1>
         <div className="flex flex-col md:flex-row gap-4">
-          <div className="w-full md:w-1/4 mt-3">
+          <div className="w-full md:w-1/4">
             <h2 className="text-lg font-semibold mb-2 text-center">
               Form Elements
             </h2>
@@ -172,13 +175,13 @@ const MainScreen = () => {
                 selectedComponent={selectedComponent}
                 onUpdate={updateComponentProperties}
               />
-            </div>
-          </div>
-          {/* Design Area */}
-          <div className="w-full md:w-3/4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold mb-2">Design Area</h2>
-              <div className="flex justify-end mb-2 gap-2">
+              <div className="flex flex-col mt-2 gap-2">
+                <Button className="bg-green-600" onClick={saveCurrentDesign}>
+                  Save Design
+                </Button>
+                <Button onClick={loadSavedDesign} className="bg-purple-500">
+                  Load Design
+                </Button>
                 {selectedComponent && (
                   <Button
                     variant={"destructive"}
@@ -187,14 +190,12 @@ const MainScreen = () => {
                     Delete Component
                   </Button>
                 )}
-                <Button className="bg-green-600" onClick={saveCurrentDesign}>
-                  Save Design
-                </Button>
-                <Button onClick={loadSavedDesign} className="bg-purple-500">
-                  Load Design
-                </Button>
               </div>
             </div>
+          </div>
+          {/* Design Area */}
+          <div className="w-full md:w-3/4">
+            <h2 className="text-lg font-semibold mb-2">Design Area</h2>
             <Card
               onDragOver={handleDragOver}
               onDrop={handleDrop}
